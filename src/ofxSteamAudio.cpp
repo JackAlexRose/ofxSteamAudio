@@ -199,54 +199,6 @@ void ofxSteamAudio::setFrameSize(int frameSize) {
 }
 
 void ofxSteamAudio::mixAudioSamples(ofSoundBuffer &outputBuffer, int bufferSize, std::vector<SpatialBuffer> spatialisedSound) {
-	
-	vector<float> mixedVec;
-	mixedVec.resize(bufferSize);
-	
-	//float* mixed;
-	double RMS = 0;
-
-	
-	//mixed = new float[bufferSize];
-
-	for (int i = 0; i < bufferSize; ++i) {
-		for (int b = 0; b < spatialisedSound.size(); ++b) {
-			mixedVec[i] = (spatialisedSound[b].buffer.interleavedBuffer[i] * _sources[b].getGain());
-		}
-		ofLog() << mixedVec[i];
-		RMS += mixedVec[i] * mixedVec[i];
-	}
-	
-
- 	RMS /= bufferSize;
-	RMS = sqrt(RMS);
-
-	double GainMaster = 0x7fff / (sqrt(2)*RMS);
-	/*
-	for (int i = 0; i < (bufferSize / 2); ++i) {
-		mixed[i] *= GainMaster;
-
-		if (mixed[i] > 0x7fff) {
-			mixed[i] = 0x7fff;
-		}
-		else if (mixed[i] < -0x7fff) {
-			mixed[i] = -0x7fff;
-		}
-		
-		if (i % 2 == 0) {
-			outputBuffer.getSample(i, 0) = mixed[i * 2];
-		}
-		else {
-			outputBuffer.getSample(i, 1) = mixed[i];
-		}
-	}*/
-
-	for (int i = 0; i < (bufferSize / 2); i++) {
-		outputBuffer.getSample(i, 0) = mixedVec[i * 2];
-		outputBuffer.getSample(i, 1) = mixedVec[i * 2 + 1];
-	}
-
-	/*
 	float* mixed = new float[bufferSize];
 
 	for (int i = 0; i < bufferSize; ++i) {
@@ -282,5 +234,5 @@ void ofxSteamAudio::mixAudioSamples(ofSoundBuffer &outputBuffer, int bufferSize,
 		else {
 			outputBuffer.getSample(i, 1) = mixed[i];
 		}
-	}*/
+	}
 }
